@@ -30,9 +30,10 @@ public class OI {
 
   public OI() {
     buttonY.whenPressed(new zeroTestEncoders());
+    buttonA.whenPressed(new GoToPosition(4096));
   }
 
-  public static double deadzone(double input) { // applies deadzone to a joystick
+  public static double deadzone(double input) { // applies deadzone to a joystick, input from -1 ro 1
     if (deadzone > Math.abs(input)) // if input is smaller than deadzone
       return 0;
     return input;

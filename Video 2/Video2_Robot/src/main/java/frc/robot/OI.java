@@ -29,10 +29,10 @@ public class OI {
       button7 = new JoystickButton(stick, 7), button8 = new JoystickButton(stick, 8);
 
   public OI() {
-    buttonY.whenPressed(new zeroTestEncoders());
+    //buttonY.whenPressed(new zeroTestEncoders());
   }
 
-  public static double deadzone(double input) { // applies deadzone to a joystick
+  public static double deadzone(double input) { // applies deadzone to a joystick, input from -1 ro 1
     if (deadzone > Math.abs(input)) // if input is smaller than deadzone
       return 0;
     return input;

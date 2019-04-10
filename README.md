@@ -67,7 +67,7 @@ Talon.configPeakCurrentDuration(int milliseconds, int timeoutMs)
 Talon.configPeakCurrentLimit(int amps, int timeoutMs)
 Talon.enableCurrentLimit(boolean enable)
 ```
-There are [timeouts](#what-is-the-timeout-argument-) for these methods.
+There are [timeouts](#what-is-the-timeout-argument) for these methods.
 Note that the Victor SPX does not support current sensing and limiting, but if it is following a Talon that is current limiting, it will have its output limited in such a way as to effectively limit the current.
 `configContinuousCurrentLimit` will set the current limit in amps.
 `configPeakCurrentLimit` will set the peak current limit, if one is used.
@@ -117,7 +117,7 @@ Finally, `set` will set the target of the PID loop. Note that position is in ter
 
 For all of the above,the pidIdx argument will select either the Inner (0) or Outer (1) PID loop, if your are using multiple PID loops to drive a mechanism. Typically a user will only use the Inner loop, so if there is uncertainty on what to put here, put a “0” to select the inner loop.
 
-As usual, use [timeouts](#what-is-the-timeout-argument-) when possible.
+As usual, use [timeouts](#what-is-the-timeout-argument) when possible.
 
 # Miscellaneous
 This section will cover some miscellaneous methods and questions.

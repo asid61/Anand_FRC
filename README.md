@@ -70,13 +70,13 @@ Talon.enableCurrentLimit(boolean enable)
 There are [timeouts](#what-is-the-timeout-argument) for these methods.
 Note that the Victor SPX does not support current sensing and limiting, but if it is following a Talon that is current limiting, it will have its output limited in such a way as to effectively limit the current.
 
-`configContinuousCurrentLimit` will set the current limit in amps.
+[configContinuousCurrentLimit](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_s_r_x.html#afd1b774fc600d205ca71cda15026c5c4) will set the current limit in amps.
 
-`configPeakCurrentLimit` will set the peak current limit, if one is used.
+[configPeakCurrentLimit](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_s_r_x.html#a88022cd9b99702adc611feeabba08700) will set the peak current limit, if one is used.
 
-`configPeakCurrentDuration` will set the time that the current is allowed to be at the peak current limit until the Talon throttles the output to to continuous current limit.
+[configPeakCurrentDuration](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_s_r_x.html#ae0a6e2d6b0ae174c9f5c4ec85977bcfd) will set the time that the current is allowed to be at the peak current limit until the Talon throttles the output to to continuous current limit.
 
-`enableCurrentLimit` will enable current limiting if true is passed in, or disable it with a false argument.
+[enableCurrentLimit](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_s_r_x.html#ae0a4edf256eeacd063685bc2e07a71cf) will enable current limiting if true is passed in, or disable it with a false argument.
 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a33eed3eb1be4209228bf8881dd59ba9d)
 
@@ -109,7 +109,7 @@ In your command, use these two methods:
 Talon.selectProfileSlot(int slotIdx, int pidIdx);
 Talon.set(ControlMode.Position, double position);
 ```
-`setSensorPhase` will set the “phase” of the sensor, such that positive output of your motor controller corresponds to positive movement and sensor readings. [See CTRE’s guide here.](https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase)
+`[setSensorPhase](https://www.ctr-electronics.com/downloads/api/java/html/interfacecom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1_i_motor_controller.html#a69768f9ce3c7354e57085e8c93a455f3)` will set the “phase” of the sensor, such that positive output of your motor controller corresponds to positive movement and sensor readings. [See CTRE’s guide here.](https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase)
 configSelectedFeedbackSensor configures the sensor. The Talon can take sensor readings from many sources including remote sensors not directly plugged into it. In many cases, [sensor] will either be Quadrature or CTRE_MagEncoder_Relative for quadrature encoders or SRX Mag encoders. 
 
 `config_kP`, `config_kI`, `config_kD`, and `config_kF` will configure the PIDF constants. Tuning constants in Phoenix Tuner before putting them in code can be convenient. For position, F will usually be 0. slotIdx is which PID slot to store the constants in (0-3). The Talon can store up to 4 sets of PIDF constants, but most applications will only need to use a single one.

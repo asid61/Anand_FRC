@@ -141,6 +141,8 @@ You'll also need to add a kF as described in [CTRE's walkthrough](https://phoeni
 
 `configMotionAcceleration` sets the acceleration of the mechanism on its way to the target, in units of ticks/100ms/sec. That means that if your acceleration is set to 1000 and your cruise velocity is set to 500, the mechanism will take 0.5 seconds to accelerate to the cruise velocity, and take another 0.5 seconds to decelerate from cruise velocity to a full stop.
 
+As usual, use [timeouts](#what-is-the-timeout-argument) when possible.
+
 Here's an annotated picture of what Motion Magic does to your position. 
 
 ![](https://i.imgur.com/s4cCiHT.png)

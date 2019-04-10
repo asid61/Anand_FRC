@@ -1,3 +1,6 @@
+# PYR FAQ
+This repository contains the code used for the PYR series. Below is a FAQ containined many commonly-asked questions for programming robots.
+
 - [PYR FAQ](#pyr-faq)
   * [Open-loop commands](#open-loop-commands)
     + [How do I tell my robot to drive?](#how-do-i-tell-my-robot-to-drive-)
@@ -8,8 +11,6 @@
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-# PYR FAQ
-This repository contains the code used for the PYR series. Below is a FAQ containined many commonly-asked questions for programming robots.
 ## Open-loop commands
 This section goes over many of the common open-loop configurations found on FRC robots. Note that is Talon.xxx or Victor.xxx is used, the configuration can be used with either motor controller unless otherwise specified. 
 

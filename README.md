@@ -28,7 +28,7 @@ to set a Talon’s or Victor’s output. throttle should be a on the scale -1.0 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#aa005db111ab95d151b2604f5cf133238)
 
 ## What do I do if my mechanism is moving the wrong way?
-See this section on inverting the output of a Talon/Victor
+[See this section from CTRE on inverting the output of a Talon/Victor](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html#inverts)
 
 You can invert a motor controller by using 
 ```java
@@ -80,18 +80,18 @@ Below is a plot showing current vs. time when all of the current limiting settin
 ![](https://i.imgur.com/QITTdWQ.png)
 
 ## Can I slow my robot’s acceleration and deceleration?
-Using open-loop ramping can help make robot motion smoother. See documentation here.
+Using open-loop ramping can help make robot motion smother. [See documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html#ramping)
 Use the method
 ```java
 Talon.configOpenloopRamp(double secondsFromNeutralToFull, timeoutMs)
 ```
-to  configure the ramp rate. secondsFromNeutralToFull is the number of seconds to go from an output of 0.0 to 1.0 (or -1.0). The maximum ramp time is 10 seconds, but this is ridiculously slow. Open loop ramps can make your robot run smoother and prevent battery voltage from dropping and browning out your robot. Make sure to use the timeout.
+to  configure the ramp rate. secondsFromNeutralToFull is the number of seconds to go from an output of 0.0 to 1.0 (or -1.0). The maximum ramp time is 10 seconds, but this is ridiculously slow. Open loop ramps can make your robot run smoother and prevent battery voltage from dropping and [browning out](#what-is-a-brownout-why-is-my-robot-stuttering) your robot. Make sure to use the [timeout](#what-is-the-timeout-argument).
 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a33eed3eb1be4209228bf8881dd59ba9d)
 
 # Closed-loop settings
 ## What methods do I need to call to set up a PID loop?
-See CTRE’s documentation on closed-loop control here.
+[See CTRE’s documentation on closed-loop control here.](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html)
 To set up a position PID command, you only need configure a few settings on your Talon (or Victor). In the case of a Talon, you’ll need these three methods to configure the Talon for closed-looping:
 ```java
 Talon.setSensorPhase(boolean phase)
@@ -105,7 +105,7 @@ In your command, use these two methods:
 Talon.selectProfileSlot(int slotIdx, int pidIdx);
 Talon.set(ControlMode.Position, double position);
 ```
-`setSensorPhase` will set the “phase” of the sensor, such that positive output of your motor controller corresponds to positive movement and sensor readings. See CTRE’s guide here.
+`setSensorPhase` will set the “phase” of the sensor, such that positive output of your motor controller corresponds to positive movement and sensor readings. [See CTRE’s guide here.](https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase)
 configSelectedFeedbackSensor configures the sensor. The Talon can take sensor readings from many sources including remote sensors not directly plugged into it. In many cases, [sensor] will either be Quadrature or CTRE_MagEncoder_Relative for quadrature encoders or SRX Mag encoders. 
 
 `config_kP`, `config_kI`, `config_kD`, and `config_kF` will configure the PIDF constants. Tuning constants in Phoenix Tuner before putting them in code can be convenient. For position, F will usually be 0. slotIdx is which PID slot to store the constants in (0-3). The Talon can store up to 4 sets of PIDF constants, but most applications will only need to use a single one.

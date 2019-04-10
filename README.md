@@ -13,7 +13,7 @@ This repository contains the code used for the PYR series. Below is a FAQ contai
 - [Miscellaneous](#miscellaneous)
   * [What is the timeout argument?](#what-is-the-timeout-argument)
   * [What is a “brownout”/ why is my robot stuttering?](#what-is-a-brownout-why-is-my-robot-stuttering)
-  * [How do I compensate for dropping/changing battery voltage?](#how-do-i-compensate-for-dropping-changing-battery-voltage)
+  * [How do I compensate for dropping or changing battery voltage?](#how-do-i-compensate-for-dropping-or-changing-battery-voltage)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -135,7 +135,7 @@ will try and set a [current limit](#how-do-i-use-current-limiting) of 10 amps. I
 ## What is a “brownout”/ why is my robot stuttering?
 [See WPIlib’s article here.](https://wpilib.screenstepslive.com/s/currentCS/m/cs_hardware/l/289498-roborio-brownout-and-understanding-current-draw)
 
-## How do I compensate for dropping/changing battery voltage?
+## How do I compensate for dropping or changing battery voltage?
 Using voltage compensation is helpful to keep your motor controller output consistent throughout a match. [See CTRE's documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html?#voltage-compensation)
 
 In the subsystem constructor, call

@@ -124,6 +124,6 @@ This section will cover some miscellaneous methods and questions.
 ## What is the timeout argument?
 Whenever a method allows you to use the timeout argument, that means it will keep trying to configure the target until the timeout (in milliseconds) is over. For example, calling 
 `Talon.configContinuousCurrentLimit(10, 15);`
-will try and set a current limit of 10 amps. If, for some reason, the command to set the current limit fails (the CAN bus doesn’t transmit correctly), then it will retry setting the limit over and over again until it succeeds, or until 15 ms passes- whichever comes first. Generally speaking, whenever a timeout argument is available, use it. A setting of 5ms to 20ms is common.
+will try and set a [current limit](#how-do-i-use-current-limiting) of 10 amps. If, for some reason, the command to set the current limit fails (the CAN bus doesn’t transmit correctly), then it will retry setting the limit over and over again until it succeeds, or until 15 ms passes- whichever comes first. Generally speaking, whenever a timeout argument is available, use it. A setting of 5ms to 20ms is common.
 ## What is a “brownout”/ why is my robot stuttering?
 [See WPIlib’s article here.](https://wpilib.screenstepslive.com/s/currentCS/m/cs_hardware/l/289498-roborio-brownout-and-understanding-current-draw)

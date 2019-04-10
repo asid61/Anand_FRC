@@ -83,6 +83,7 @@ Below is a plot showing current vs. time when all of the current limiting settin
 
 ## Can I slow my robot’s acceleration and deceleration?
 Using open-loop ramping can help make robot motion smother. [See documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html#ramping)
+
 In your subsystem constructor, call the method
 ```java
 Talon.configOpenloopRamp(double secondsFromNeutralToFull, timeoutMs)
@@ -94,6 +95,7 @@ to  configure the ramp rate. secondsFromNeutralToFull is the number of seconds t
 # Closed-loop settings
 ## What methods do I need to call to set up a PID loop?
 [See CTRE’s documentation on closed-loop control here.](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html)
+
 To set up a position PID command, you only need configure a few settings on your Talon (or Victor). In the case of a Talon, you’ll need to call these three methods in your subsystem constructor to configure the Talon for closed-looping:
 ```java
 Talon.setSensorPhase(boolean phase)
@@ -131,3 +133,17 @@ Whenever a method allows you to use the timeout argument, that means it will kee
 will try and set a [current limit](#how-do-i-use-current-limiting) of 10 amps. If, for some reason, the command to set the current limit fails (e.g. the CAN bus doesn’t transmit correctly), then it will retry setting the limit over and over again until it succeeds, or until 15 ms passes- whichever comes first. Generally speaking, whenever a timeout argument is available, use it. A setting of 5ms to 25ms is common.
 ## What is a “brownout”/ why is my robot stuttering?
 [See WPIlib’s article here.](https://wpilib.screenstepslive.com/s/currentCS/m/cs_hardware/l/289498-roborio-brownout-and-understanding-current-draw)
+
+## How do I compensate for dropping/changing battery voltage?
+Using voltage compensation is helpful to keep your motor controller output consistent throughout a match. [See CTRE's documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html?#voltage-compensation)
+
+In the subsystem constructor, call
+```
+Talon.configVoltageCompSaturation(double voltage, int timeout)
+Talon.enableVoltageCompensation(boolean enable)
+```
+[`configVoltageCompSaturation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a3fa0d04e4b839bf0eabaadb9f1657653) will configure the voltage that corresponds to the "max" output of the motor controller. So if `voltage` is set to 11.0, calling `set(0.5)` will result in an output of 5.5 V. This means that regardless of the state of the battery, your motors will spin at the same speed and perform the same.
+
+[`enableVoltageCompensation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#af0feca0cb0b726a8b68e6a57b728ce7c) enables/disables the compensation mode. Pass in `true` to enable the voltage compensation mode.
+
+As usual, use [timeouts](#what-is-the-timeout-argument) when possible.

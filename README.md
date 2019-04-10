@@ -1,5 +1,5 @@
 # PYR FAQ
-This repository contains the code used for the PYR series. Below is a FAQ containined many commonly-asked questions for programming robots.
+This repository contains the code used for the PYR series. Below is a FAQ containined many commonly-asked questions for programming robots with Talons and Victors.
 
 - [PYR FAQ](#pyr-faq)
 - [Open-loop commands](#open-loop-commands)

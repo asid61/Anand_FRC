@@ -10,7 +10,7 @@ This repository contains the code used for the PYR series. Below is a FAQ contai
   * [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robot-s-acceleration-and-deceleration)
 - [Closed-loop settings](#closed-loop-settings)
   * [What methods do I need to call to set up a PID loop?](#what-methods-do-i-need-to-call-to-set-up-a-pid-loop)
-  * [I've got PID working. But what is Motion Magic?](#i-ve-got-pid-working-but-what-is-motion-magic)
+  * [I've got PID working. But what is Motion Magic?](#i-ve-got-pid-working-but-what-is-motion-magic-)
 - [Miscellaneous](#miscellaneous)
   * [What is the timeout argument?](#what-is-the-timeout-argument)
   * [What is a “brownout”/ why is my robot stuttering?](#what-is-a--brownout---why-is-my-robot-stuttering)

@@ -68,7 +68,7 @@ Talon.configPeakCurrentDuration(int milliseconds, int timeoutMs)
 Talon.configPeakCurrentLimit(int amps, int timeoutMs)
 Talon.enableCurrentLimit(boolean enable)
 ```
-There are timeouts for these methods.
+There are [timeouts](#what-is-the-timeout-argument-) for these methods.
 Note that the Victor SPX does not support current sensing and limiting, but if it is following a Talon that is current limiting, it will have its output limited in such a way as to effectively limit the current.
 `configContinuousCurrentLimit` will set the current limit in amps.
 `configPeakCurrentLimit` will set the peak current limit, if one is used.
@@ -118,13 +118,13 @@ Finally, `set` will set the target of the PID loop. Note that position is in ter
 
 For all of the above,the  pidIdx argument will select either the Inner (0) or Outer (1) PID loop, if your are using multiple PID loops to drive a mechanism. Typically a user will only use the Inner loop, so if there is uncertainty on what to put here, put a “0”.
 
-As usual, use [timeouts](#What-is-the-timeout-argument?) when possible.
+As usual, use [timeouts](#what-is-the-timeout-argument-) when possible.
 
 ## Miscellaneous
 This section will cover some miscellaneous methods and questions.
 ### What is the timeout argument?
 Whenever a method allows you to use the timeout argument, that means it will keep trying to configure the target until the timeout (in milliseconds) is over. For example, calling 
-	Talon.configContinuousCurrentLimit(10, 15);
+`Talon.configContinuousCurrentLimit(10, 15);`
 will try and set a current limit of 10 amps. If, for some reason, the command to set the current limit fails (the CAN bus doesn’t transmit correctly), then it will retry setting the limit over and over again until it succeeds, or until 15 ms passes- whichever comes first. Generally speaking, whenever a timeout argument is available, use it. A setting of 5ms to 20ms is common.
 ### What is a “brownout”/ why is my robot stuttering?
-See WPIlib’s article here.
+[See WPIlib’s article here.](https://wpilib.screenstepslive.com/s/currentCS/m/cs_hardware/l/289498-roborio-brownout-and-understanding-current-draw)

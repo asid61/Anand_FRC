@@ -1,3 +1,13 @@
+- [PYR FAQ](#pyr-faq)
+  * [Open-loop commands](#open-loop-commands)
+    * [How do I tell my robot to drive?](#how-do-i-tell-my-robot-to-drive-)
+    * [What do I do if my mechanism is moving the wrong way?](#what-do-i-do-if-my-mechanism-is-moving-the-wrong-way-)
+    * [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling--without-using-a-sensor-)
+    * [How do I use current limiting?](#how-do-i-use-current-limiting-)
+    * [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robot-s-acceleration-and-deceleration-)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 # PYR FAQ
 This repository contains the code used for the PYR series. Below is a FAQ containined many commonly-asked questions for programming robots.
 ## Open-loop commands

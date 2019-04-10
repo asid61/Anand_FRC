@@ -2,25 +2,24 @@
 This repository contains the code used for the PYR series. Below is a FAQ containined many commonly-asked questions for programming robots.
 
 - [PYR FAQ](#pyr-faq)
-  * [Open-loop commands](#open-loop-commands)
-    * [How do I tell my robot to drive?](#how-do-i-tell-my-robot-to-drive-)
-    * [What do I do if my mechanism is moving the wrong way?](#what-do-i-do-if-my-mechanism-is-moving-the-wrong-way-)
-    * [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling--without-using-a-sensor-)
-    * [How do I use current limiting?](#how-do-i-use-current-limiting-)
-    * [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robot-s-acceleration-and-deceleration-)
-  * [Closed-loop settings](#closed-loop-settings)
-    * [What methods do I need to call to set up a PID loop?](#what-methods-do-i-need-to-call-to-set-up-a-pid-loop-)
-  * [Miscellaneous](#miscellaneous)
-    * [What is the timeout argument?](#what-is-the-timeout-argument-)
-    * [What is a “brownout”/ why is my robot stuttering?](#what-is-a--brownout---why-is-my-robot-stuttering-)
+- [Open-loop commands](#open-loop-commands)
+  * [How do I tell my robot to drive?](#how-do-i-tell-my-robot-to-drive-)
+  * [What do I do if my mechanism is moving the wrong way?](#what-do-i-do-if-my-mechanism-is-moving-the-wrong-way-)
+  * [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling--without-using-a-sensor-)
+  * [How do I use current limiting?](#how-do-i-use-current-limiting-)
+  * [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robot-s-acceleration-and-deceleration-)
+- [Closed-loop settings](#closed-loop-settings)
+  * [What methods do I need to call to set up a PID loop?](#what-methods-do-i-need-to-call-to-set-up-a-pid-loop-)
+- [Miscellaneous](#miscellaneous)
+  * [What is the timeout argument?](#what-is-the-timeout-argument-)
+  * [What is a “brownout”/ why is my robot stuttering?](#what-is-a--brownout---why-is-my-robot-stuttering-)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-
-## Open-loop commands
+# Open-loop commands
 This section goes over many of the common open-loop configurations found on FRC robots. Note that is Talon.xxx or Victor.xxx is used, the configuration can be used with either motor controller unless otherwise specified. 
 
-### How do I tell my robot to drive?
+## How do I tell my robot to drive?
 Use the line
 ```java
 Talon.set(DemandType.PercentOutput, double throttle) 
@@ -28,7 +27,7 @@ Talon.set(DemandType.PercentOutput, double throttle)
 to set a Talon’s or Victor’s output. throttle should be a on the scale -1.0 to 1.0. Talon should be an instance of a TalonSRX or VictorSPX motor controller.
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#aa005db111ab95d151b2604f5cf133238)
 
-### What do I do if my mechanism is moving the wrong way?
+## What do I do if my mechanism is moving the wrong way?
 See this section on inverting the output of a Talon/Victor
 
 You can invert a motor controller by using 
@@ -48,7 +47,7 @@ This is more robust than manually setting the inverted mode for each motor contr
 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#aaeccf1a74b1b17755417432fba24fb73)
 
-### How can I stop my elevator from falling, without using a sensor?
+## How can I stop my elevator from falling, without using a sensor?
 Use the method
 ```java
 Talon.set(DemandType.PercentOutput, double throttle, DemandType.ArbitraryFeedforward, double gravityComp) 
@@ -58,7 +57,7 @@ This will effectively stop your elevator from falling by adding a small output t
 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a63c3a79d8484d423439d786cc2833b85)
 
-### How do I use current limiting?
+## How do I use current limiting?
 [See this section on using current limits](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html#current-limit)
 
 There are four methods that are used to limit current. 
@@ -80,7 +79,7 @@ Note that the Victor SPX does not support current sensing and limiting, but if i
 Below is a plot showing current vs. time when all of the current limiting settings are used.
 ![](https://i.imgur.com/QITTdWQ.png)
 
-### Can I slow my robot’s acceleration and deceleration?
+## Can I slow my robot’s acceleration and deceleration?
 Using open-loop ramping can help make robot motion smoother. See documentation here.
 Use the method
 ```java
@@ -90,8 +89,8 @@ to  configure the ramp rate. secondsFromNeutralToFull is the number of seconds t
 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a33eed3eb1be4209228bf8881dd59ba9d)
 
-## Closed-loop settings
-### What methods do I need to call to set up a PID loop?
+# Closed-loop settings
+## What methods do I need to call to set up a PID loop?
 See CTRE’s documentation on closed-loop control here.
 To set up a position PID command, you only need configure a few settings on your Talon (or Victor). In the case of a Talon, you’ll need these three methods to configure the Talon for closed-looping:
 ```java
@@ -116,15 +115,15 @@ selectProfileSlot will link one of the four PID slots to one of the two PID loop
 
 Finally, `set` will set the target of the PID loop. Note that position is in terms of sensor units, so you’ll need to convert from other units.
 
-For all of the above,the  pidIdx argument will select either the Inner (0) or Outer (1) PID loop, if your are using multiple PID loops to drive a mechanism. Typically a user will only use the Inner loop, so if there is uncertainty on what to put here, put a “0”.
+For all of the above,the pidIdx argument will select either the Inner (0) or Outer (1) PID loop, if your are using multiple PID loops to drive a mechanism. Typically a user will only use the Inner loop, so if there is uncertainty on what to put here, put a “0” to select the inner loop.
 
 As usual, use [timeouts](#what-is-the-timeout-argument-) when possible.
 
-## Miscellaneous
+# Miscellaneous
 This section will cover some miscellaneous methods and questions.
-### What is the timeout argument?
+## What is the timeout argument?
 Whenever a method allows you to use the timeout argument, that means it will keep trying to configure the target until the timeout (in milliseconds) is over. For example, calling 
 `Talon.configContinuousCurrentLimit(10, 15);`
 will try and set a current limit of 10 amps. If, for some reason, the command to set the current limit fails (the CAN bus doesn’t transmit correctly), then it will retry setting the limit over and over again until it succeeds, or until 15 ms passes- whichever comes first. Generally speaking, whenever a timeout argument is available, use it. A setting of 5ms to 20ms is common.
-### What is a “brownout”/ why is my robot stuttering?
+## What is a “brownout”/ why is my robot stuttering?
 [See WPIlib’s article here.](https://wpilib.screenstepslive.com/s/currentCS/m/cs_hardware/l/289498-roborio-brownout-and-understanding-current-draw)

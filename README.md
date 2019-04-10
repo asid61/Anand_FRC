@@ -70,7 +70,7 @@ Talon.enableCurrentLimit(boolean enable)
 There are [timeouts](#what-is-the-timeout-argument) for these methods.
 Note that the Victor SPX does not support current sensing and limiting, but if it is following a Talon that is current limiting, it will have its output limited in such a way as to effectively limit the current.
 
-[configContinuousCurrentLimit](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_s_r_x.html#afd1b774fc600d205ca71cda15026c5c4) will set the current limit in amps.
+[`configContinuousCurrentLimit`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_s_r_x.html#afd1b774fc600d205ca71cda15026c5c4) will set the current limit in amps.
 
 [`configPeakCurrentLimit`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_talon_s_r_x.html#a88022cd9b99702adc611feeabba08700) will set the peak current limit, if one is used.
 

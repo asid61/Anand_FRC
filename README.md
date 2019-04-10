@@ -13,6 +13,7 @@ This repository contains the code used for the PYR series. Below is a FAQ contai
 - [Miscellaneous](#miscellaneous)
   * [What is the timeout argument?](#what-is-the-timeout-argument)
   * [What is a “brownout”/ why is my robot stuttering?](#what-is-a-brownout-why-is-my-robot-stuttering)
+  * [How do I compensate for dropping/changing battery voltage?](#how-do-I-compensate-for-dropping/changing battery-voltage)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 

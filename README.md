@@ -5,14 +5,15 @@ This repository contains the code used for the PYR series. Below is a FAQ contai
 - [Open-loop commands](#open-loop-commands)
   * [How do I tell my robot to drive?](#how-do-i-tell-my-robot-to-drive)
   * [What do I do if my mechanism is moving the wrong way?](#what-do-i-do-if-my-mechanism-is-moving-the-wrong-way)
-  * [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling-without-using-a-sensor)
+  * [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling--without-using-a-sensor)
   * [How do I use current limiting?](#how-do-i-use-current-limiting)
   * [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robot-s-acceleration-and-deceleration)
 - [Closed-loop settings](#closed-loop-settings)
   * [What methods do I need to call to set up a PID loop?](#what-methods-do-i-need-to-call-to-set-up-a-pid-loop)
+  * [I've got PID working. But what is Motion Magic?](#i-ve-got-pid-working-but-what-is-motion-magic)
 - [Miscellaneous](#miscellaneous)
   * [What is the timeout argument?](#what-is-the-timeout-argument)
-  * [What is a “brownout”/ why is my robot stuttering?](#what-is-a-brownout-why-is-my-robot-stuttering)
+  * [What is a “brownout”/ why is my robot stuttering?](#what-is-a--brownout---why-is-my-robot-stuttering)
   * [How do I compensate for dropping or changing battery voltage?](#how-do-i-compensate-for-dropping-or-changing-battery-voltage)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
@@ -126,6 +127,25 @@ For all of the above,the pidIdx argument will select either the Inner (0) or Out
 
 As usual, use [timeouts](#what-is-the-timeout-argument) when possible.
 
+## I've got PID working. But what is Motion Magic?
+Motion Magic is similar to Position PID, but drives the mechanism at a given acceleration and velocity to get smoother motion on the way to the target. This results in smoother and more controlled motion. [See CTRE's documentation here.] (https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#motion-magic-position-velocity-current-closed-loop-closed-loop)
+
+To use Motion Magic, you need the same settings as you do for regular closed-loop. However, add two more lines to your setup in your subsystem constructor:
+```
+configMotionCruiseVelocity(int velocity, int timeout)
+configMotionAcceleration(int acceleration, int timeout)
+```
+You'll also need to add a kF as described in [CTRE's walkthrough](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-feed-forward-gain-kf), and modify your `set()` line to use the ControlMode.MotionMagic control type. kF = 1023 * duty-cycle / sensor-velocity-sensor-units-per-100ms, so if you measure a velocity of 7500 ticks/100ms at 100% throttle, your kF should be 0.1364. kF can also be tuned slightly to get the open-loop performance of MotionMagic closer to the target. Note that this is written as of 2019- the "1023" will likely disappear by 2020.
+
+`configMotionCruiseVelocity` sets the cruise velocity of the mechanism on its way to the target, in units of ticks/100ms. A 4096 PPR encoder on a 1000RPM shaft would have a velocity of 1000 rot/min * 4096 ticks/rot * 1min / 60sec * 0.1sec / 100ms = 6,827 ticks/100ms.
+
+`configMotionAcceleration` sets the acceleration of the mechanism on its way to the target, in units of ticks/100ms/sec. That means that if your acceleration is set to 1000 and your cruise velocity is set to 500, the mechanism will take 0.5 seconds to accelerate to the cruise velocity, and take another 0.5 seconds to decelerate from cruise velocity to a full stop.
+
+Here's an annotated picture of what Motion Magic does to your position. 
+
+![](https://i.imgur.com/s4cCiHT.png)
+Source: James Pearman on the Vex Forum.
+
 # Miscellaneous
 This section will cover some miscellaneous methods and questions.
 ## What is the timeout argument?
@@ -145,6 +165,6 @@ Talon.enableVoltageCompensation(boolean enable)
 ```
 [`configVoltageCompSaturation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a3fa0d04e4b839bf0eabaadb9f1657653) will configure the voltage that corresponds to the "max" output of the motor controller. So if `voltage` is set to 11.0, calling `set(0.5)` will result in an output of 5.5 V. This means that regardless of the state of the battery, your motors will spin at the same speed and perform the same.
 
-[`enableVoltageCompensation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#af0feca0cb0b726a8b68e6a57b728ce7c) enables/disables the compensation mode. Pass in `true` to enable the voltage compensation mode.
+[`enableVoltageCompensation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#af0feca0cb0b726a8b68e6a57b728ce7c) enables/disables the compensation mode. Pass in `true` to enable voltage compensation.
 
 As usual, use [timeouts](#what-is-the-timeout-argument) when possible.

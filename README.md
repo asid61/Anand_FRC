@@ -3,13 +3,19 @@ This repository contains the code used for the PYR series. Below is a FAQ contai
 
 - [PYR FAQ](#pyr-faq)
   * [Open-loop commands](#open-loop-commands)
-    + [How do I tell my robot to drive?](#how-do-i-tell-my-robot-to-drive-)
-    + [What do I do if my mechanism is moving the wrong way?](#what-do-i-do-if-my-mechanism-is-moving-the-wrong-way-)
-    + [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling--without-using-a-sensor-)
-    + [How do I use current limiting?](#how-do-i-use-current-limiting-)
-    + [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robot-s-acceleration-and-deceleration-)
+    * [How do I tell my robot to drive?](#how-do-i-tell-my-robot-to-drive-)
+    * [What do I do if my mechanism is moving the wrong way?](#what-do-i-do-if-my-mechanism-is-moving-the-wrong-way-)
+    * [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling--without-using-a-sensor-)
+    * [How do I use current limiting?](#how-do-i-use-current-limiting-)
+    * [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robot-s-acceleration-and-deceleration-)
+  * [Closed-loop settings](#closed-loop-settings)
+    * [What methods do I need to call to set up a PID loop?](#what-methods-do-i-need-to-call-to-set-up-a-pid-loop-)
+  * [Miscellaneous](#miscellaneous)
+    * [What is the timeout argument?](#what-is-the-timeout-argument-)
+    * [What is a “brownout”/ why is my robot stuttering?](#what-is-a--brownout---why-is-my-robot-stuttering-)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 ## Open-loop commands
 This section goes over many of the common open-loop configurations found on FRC robots. Note that is Talon.xxx or Victor.xxx is used, the configuration can be used with either motor controller unless otherwise specified. 
@@ -39,6 +45,7 @@ Victor.setInverted(InvertType.OpposeMaster)
 ```
 
 This is more robust than manually setting the inverted mode for each motor controller, as the follower will invert its output if the master is inverted.
+
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#aaeccf1a74b1b17755417432fba24fb73)
 
 ### How can I stop my elevator from falling, without using a sensor?
@@ -48,6 +55,7 @@ Talon.set(DemandType.PercentOutput, double throttle, DemandType.ArbitraryFeedfor
 ```
 The throttle output is from -1.0 to 1.0 as normal. `ArbitraryFeedforward` will apply an extra gravityComp to your throttle to determine the output of the motor controller. So, if gravityComp is equal to 0.1, your output throttle will always have 0.1 added to it, making your effective output range -0.9 to 1.1. Of course, you can’t go over an output of 1.0, so your range is really -0.9 to 1.0. 
 This will effectively stop your elevator from falling by adding a small output to keep it in place. However, it is better to also use an encoder and closed-loop control.
+
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a63c3a79d8484d423439d786cc2833b85)
 
 ### How do I use current limiting?
@@ -68,6 +76,7 @@ Note that the Victor SPX does not support current sensing and limiting, but if i
 `enableCurrentLimit` will enable current limiting if true is passed in, or disable it with a false argument.
 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a33eed3eb1be4209228bf8881dd59ba9d)
+
 Below is a plot showing current vs. time when all of the current limiting settings are used.
 ![](https://i.imgur.com/QITTdWQ.png)
 
@@ -78,7 +87,8 @@ Use the method
 Talon.configOpenloopRamp(double secondsFromNeutralToFull, timeoutMs)
 ```
 to  configure the ramp rate. secondsFromNeutralToFull is the number of seconds to go from an output of 0.0 to 1.0 (or -1.0). The maximum ramp time is 10 seconds, but this is ridiculously slow. Open loop ramps can make your robot run smoother and prevent battery voltage from dropping and browning out your robot. Make sure to use the timeout.
-Find API documentation here.
+
+[Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a33eed3eb1be4209228bf8881dd59ba9d)
 
 ## Closed-loop settings
 ### What methods do I need to call to set up a PID loop?

@@ -20,7 +20,7 @@ This repository contains the code used for the PYR series. Below is a FAQ contai
 This section goes over many of the common open-loop configurations found on FRC robots. Note that is Talon.xxx or Victor.xxx is used, the configuration can be used with either motor controller unless otherwise specified. 
 
 ## How do I tell my robot to drive?
-Use the line
+In your command's execute(), use the line
 ```java
 Talon.set(DemandType.PercentOutput, double throttle) 
 ```
@@ -30,11 +30,11 @@ to set a Talon’s or Victor’s output. throttle should be a on the scale -1.0 
 ## What do I do if my mechanism is moving the wrong way?
 [See this section from CTRE on inverting the output of a Talon/Victor](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html#inverts)
 
-You can invert a motor controller by using 
+In your subsystem constructor, invert the output of a motor controller by calling 
 ```java
 Talon.setInverted(boolean invert)
 ```
-Where invert is whether or not to invert the motor controller’s output (i.e. reverse the direction). If you have any follower motor controllers, such as a Victor following a Talon, then you can also use
+where invert is whether or not to invert the motor controller’s output (i.e. reverse the direction). If you have any follower motor controllers, such as a Victor following a Talon, then you can also use
 ```java
 Victor.setInverted(InvertType.FollowMaster) 
 ```
@@ -48,7 +48,7 @@ This is more robust than manually setting the inverted mode for each motor contr
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#aaeccf1a74b1b17755417432fba24fb73)
 
 ## How can I stop my elevator from falling, without using a sensor?
-Use the method
+In your command's execute(), use the method
 ```java
 Talon.set(DemandType.PercentOutput, double throttle, DemandType.ArbitraryFeedforward, double gravityComp) 
 ```
@@ -60,7 +60,7 @@ This will effectively stop your elevator from falling by adding a small output t
 ## How do I use current limiting?
 [See this section on using current limits](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html#current-limit)
 
-There are four methods that are used to limit current. 
+There are four methods that are used to limit current. These are typically called in the subsystem constructor, but can also be called in command constructors if the limit needs to be changed or disabled/enabled.
 ```java
 Talon.configContinuousCurrentLimit(int amps, int timeoutMs)
 Talon.configPeakCurrentDuration(int milliseconds, int timeoutMs)
@@ -83,7 +83,7 @@ Below is a plot showing current vs. time when all of the current limiting settin
 
 ## Can I slow my robot’s acceleration and deceleration?
 Using open-loop ramping can help make robot motion smother. [See documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html#ramping)
-Use the method
+In your subsystem constructor, call the method
 ```java
 Talon.configOpenloopRamp(double secondsFromNeutralToFull, timeoutMs)
 ```
@@ -94,7 +94,7 @@ to  configure the ramp rate. secondsFromNeutralToFull is the number of seconds t
 # Closed-loop settings
 ## What methods do I need to call to set up a PID loop?
 [See CTRE’s documentation on closed-loop control here.](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html)
-To set up a position PID command, you only need configure a few settings on your Talon (or Victor). In the case of a Talon, you’ll need these three methods to configure the Talon for closed-looping:
+To set up a position PID command, you only need configure a few settings on your Talon (or Victor). In the case of a Talon, you’ll need to call these three methods in your subsystem constructor to configure the Talon for closed-looping:
 ```java
 Talon.setSensorPhase(boolean phase)
 Talon.configSelectedFeedbackSensor(FeedbackDevice.[sensor], int pidIdx, int timeout)
@@ -102,17 +102,19 @@ Talon.config_kP(int slotIdx, double value, int timeout) // also IDF
 Talon.setSelectedSensorPosition(int position, int pidIdx, int timeoutMs)
 ```
 
-In your command, use these two methods:
+In your command constructor, use these two methods:
 ```java
 Talon.selectProfileSlot(int slotIdx, int pidIdx);
 Talon.set(ControlMode.Position, double position);
 ```
+The `set` command can also be called in the execute() of your command.
+
 [`setSensorPhase`](https://www.ctr-electronics.com/downloads/api/java/html/interfacecom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1_i_motor_controller.html#a69768f9ce3c7354e57085e8c93a455f3) will set the “phase” of the sensor, such that positive output of your motor controller corresponds to positive movement and sensor readings. [See CTRE’s guide here.](https://phoenix-documentation.readthedocs.io/en/latest/ch14_MCSensor.html#sensor-phase)
 configSelectedFeedbackSensor configures the sensor. The Talon can take sensor readings from many sources including remote sensors not directly plugged into it. In many cases, [sensor] will either be Quadrature or CTRE_MagEncoder_Relative for quadrature encoders or SRX Mag encoders. 
 
 [`config_kP`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#ae7dc2f88eda1669de1047e5b8b0b97ae), `config_kI`, `config_kD`, and `config_kF` will configure the PIDF constants. Tuning constants in Phoenix Tuner before putting them in code can be convenient. For position, F will usually be 0. slotIdx is which PID slot to store the constants in (0-3). The Talon can store up to 4 sets of PIDF constants, but most applications will only need to use a single one.
 
-[`setSelectedSensorPosition`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a7f8b2b5f416dfddd0942fcca610ac774) will set the position of the sensor when the mechanism is in a known location. Typically, `setSelectedSensorPosition(0, pidIdx, timeout)` is called to “zero” a sensor at one of the extremes of travel. For something like a drivetrain with no limit, it can be helpful to zero the sensor in RobotInit().
+[`setSelectedSensorPosition`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a7f8b2b5f416dfddd0942fcca610ac774) will set the position of the sensor when the mechanism is in a known location. Typically, `setSelectedSensorPosition(0, pidIdx, timeout)` is called to “zero” a sensor at one of the extremes of travel. For something like a drivetrain with no limit, it can be helpful to zero the sensor in your subsystem constructor.
 [`selectProfileSlot`](https://www.ctr-electronics.com/downloads/api/java/html/interfacecom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1_i_motor_controller.html#a37f20c502698e17f384b01bdc9476a4c) will link one of the four PID slots to one of the two PID loops. The first argument is which set of PID constants to use (0-3). See below for info about pidIdx.
 
 Finally, [`set`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#ab15e31b8658fd0a52fb8494a7bb3121a) will set the target of the PID loop. Note that position is in terms of sensor units, so you’ll need to convert from other units.

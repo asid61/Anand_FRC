@@ -8,13 +8,13 @@ This repository contains the code used for the PYR series. Below is a FAQ contai
   * [How can I stop my elevator from falling, without using a sensor?](#how-can-i-stop-my-elevator-from-falling-without-using-a-sensor)
   * [How do I use current limiting?](#how-do-i-use-current-limiting)
   * [Can I slow my robot’s acceleration and deceleration?](#can-i-slow-my-robots-acceleration-and-deceleration)
+  * [How do I compensate for dropping or changing battery voltage?](#how-do-i-compensate-for-dropping-or-changing-battery-voltage)
 - [Closed-loop settings](#closed-loop-settings)
   * [What methods do I need to call to set up a PID loop?](#what-methods-do-i-need-to-call-to-set-up-a-pid-loop)
   * [I've got PID working. But what is Motion Magic?](#ive-got-pid-working-but-what-is-motion-magic)
 - [Miscellaneous](#miscellaneous)
   * [What is the timeout argument?](#what-is-the-timeout-argument)
   * [What is a “brownout”/ why is my robot stuttering?](#what-is-a-brownout-why-is-my-robot-stuttering)
-  * [How do I compensate for dropping or changing battery voltage?](#how-do-i-compensate-for-dropping-or-changing-battery-voltage)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -94,6 +94,20 @@ to  configure the ramp rate. secondsFromNeutralToFull is the number of seconds t
 
 [Find API documentation here.](http://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a33eed3eb1be4209228bf8881dd59ba9d)
 
+## How do I compensate for dropping or changing battery voltage?
+Using voltage compensation is helpful to keep your motor controller output consistent throughout a match. [See CTRE's documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html?#voltage-compensation)
+
+In the subsystem constructor, call
+```
+Talon.configVoltageCompSaturation(double voltage, int timeout)
+Talon.enableVoltageCompensation(boolean enable)
+```
+[`configVoltageCompSaturation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a3fa0d04e4b839bf0eabaadb9f1657653) will configure the voltage that corresponds to the "max" output of the motor controller. So if `voltage` is set to 11.0, calling `set(0.5)` will result in an output of 5.5 V. This means that regardless of the state of the battery, your motors will spin at the same speed and perform the same.
+
+[`enableVoltageCompensation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#af0feca0cb0b726a8b68e6a57b728ce7c) enables/disables the compensation mode. Pass in `true` to enable voltage compensation.
+
+As usual, use [timeouts](#what-is-the-timeout-argument) when possible.
+
 # Closed-loop settings
 ## What methods do I need to call to set up a PID loop?
 [See CTRE’s documentation on closed-loop control here.](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html)
@@ -157,16 +171,3 @@ will try and set a [current limit](#how-do-i-use-current-limiting) of 10 amps. I
 ## What is a “brownout”/ why is my robot stuttering?
 [See WPIlib’s article here.](https://wpilib.screenstepslive.com/s/currentCS/m/cs_hardware/l/289498-roborio-brownout-and-understanding-current-draw)
 
-## How do I compensate for dropping or changing battery voltage?
-Using voltage compensation is helpful to keep your motor controller output consistent throughout a match. [See CTRE's documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch13_MC.html?#voltage-compensation)
-
-In the subsystem constructor, call
-```
-Talon.configVoltageCompSaturation(double voltage, int timeout)
-Talon.enableVoltageCompensation(boolean enable)
-```
-[`configVoltageCompSaturation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#a3fa0d04e4b839bf0eabaadb9f1657653) will configure the voltage that corresponds to the "max" output of the motor controller. So if `voltage` is set to 11.0, calling `set(0.5)` will result in an output of 5.5 V. This means that regardless of the state of the battery, your motors will spin at the same speed and perform the same.
-
-[`enableVoltageCompensation`](https://www.ctr-electronics.com/downloads/api/java/html/classcom_1_1ctre_1_1phoenix_1_1motorcontrol_1_1can_1_1_base_motor_controller.html#af0feca0cb0b726a8b68e6a57b728ce7c) enables/disables the compensation mode. Pass in `true` to enable voltage compensation.
-
-As usual, use [timeouts](#what-is-the-timeout-argument) when possible.

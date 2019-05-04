@@ -146,8 +146,8 @@ Motion Magic is similar to Position PID, but drives the mechanism at a given acc
 
 To use Motion Magic, you need the same settings as you do for regular closed-loop. However, add two more lines to your setup in your subsystem constructor:
 ```
-configMotionCruiseVelocity(int velocity, int timeout)
-configMotionAcceleration(int acceleration, int timeout)
+Talon.configMotionCruiseVelocity(int velocity, int timeout)
+Talon.configMotionAcceleration(int acceleration, int timeout)
 ```
 You'll also need to add a kF as described in [CTRE's walkthrough](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-feed-forward-gain-kf), and modify your `set()` line to use the ControlMode.MotionMagic control type. kF = 1023 * duty-cycle / sensor-velocity-sensor-units-per-100ms, so if you measure a velocity of 7500 ticks/100ms at 100% throttle, your kF should be 0.1364. kF can also be tuned slightly to get the open-loop performance of MotionMagic closer to the target. Note that this is written as of 2019- the "1023" will likely disappear by 2020.
 

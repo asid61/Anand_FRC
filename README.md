@@ -149,7 +149,7 @@ To use Motion Magic, you need the same settings as you do for regular closed-loo
 Talon.configMotionCruiseVelocity(int velocity, int timeout)
 Talon.configMotionAcceleration(int acceleration, int timeout)
 ```
-You'll also need to add a kF as described in [CTRE's walkthrough](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-feed-forward-gain-kf), and modify your `set()` line to use the ControlMode.MotionMagic control type. kF = 1023 * duty-cycle / sensor-velocity-sensor-units-per-100ms, so if you measure a velocity of 7500 ticks/100ms at 100% throttle, your kF should be 0.1364. kF can also be tuned slightly to get the open-loop performance of MotionMagic closer to the target. Note that this is written as of 2019- the "1023" will likely disappear by 2020.
+You'll also need to add a kF as described in [CTRE's walkthrough](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#calculating-velocity-feed-forward-gain-kf), and modify your `set()` line to use the ControlMode.MotionMagic control type. kF = 1023 * duty-cycle / sensor-velocity-sensor-units-per-100ms, so if you measure a velocity of 7500 ticks/100ms at 100% throttle, your kF should be 0.1364. kF can also be tuned slightly to get the open-loop performance of MotionMagic closer to the target. Note that this is written as of 2019- the "1023" will likely disappear by 2020.
 
 `configMotionCruiseVelocity` sets the cruise velocity of the mechanism on its way to the target, in units of ticks/100ms. A 4096 PPR encoder on a 1000RPM shaft would have a velocity of 1000 rot/min * 4096 ticks/rot * 1min / 60sec * 0.1sec / 100ms = 6,827 ticks/100ms.
 

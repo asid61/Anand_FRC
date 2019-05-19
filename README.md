@@ -142,7 +142,7 @@ For all of the above,the pidIdx argument will select either the Inner (0) or Out
 As usual, use [timeouts](#what-is-the-timeout-argument) when possible.
 
 ## I've got PID working. But what is Motion Magic?
-Motion Magic is similar to Position PID, but drives the mechanism at a given acceleration and velocity to get smoother motion on the way to the target. This results in smoother and more controlled motion. [See CTRE's documentation here.] (https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#motion-magic-position-velocity-current-closed-loop-closed-loop)
+Motion Magic is similar to Position PID, but drives the mechanism at a given acceleration and velocity to get smoother motion on the way to the target. This results in smoother and more controlled motion. [See CTRE's documentation here.](https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#motion-magic-position-velocity-current-closed-loop-closed-loop)
 
 To use Motion Magic, you need the same settings as you do for regular closed-loop. However, add two more lines to your setup in your subsystem constructor:
 ```

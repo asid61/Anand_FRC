@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
@@ -26,10 +25,9 @@ public class TestMotors extends Subsystem {
   public TalonSRX masterTalon;
   public VictorSPX slaveVictor;
 
-  public boolean isClosedLooping; // flag to see if position closed loop is happening
+  public int _position_slot = 0;
 
   public TestMotors() {
-    isClosedLooping = false;
     controllerInit();
   }
 
@@ -44,17 +42,34 @@ public class TestMotors extends Subsystem {
     slaveVictor.setNeutralMode(NeutralMode.Brake);
 
 
-    masterTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    masterTalon.setSelectedSensorPosition(0); // zero encoder
     masterTalon.setInverted(RobotMap.TestMotors.invertMaster); // set if the output direction is to be inverted
     slaveVictor.follow(masterTalon); // follow the master
     slaveVictor.setInverted(RobotMap.TestMotors.invertSlave); // set if the throttle should be inverted
+
+    masterTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, RobotMap.TIMEOUT);
+    masterTalon.setSensorPhase(RobotMap.TestMotors.sensorDirection);
+
+    masterTalon.config_kP(_position_slot, RobotMap.TestMotors.kP_pos, RobotMap.TIMEOUT);
+    masterTalon.config_kI(_position_slot, RobotMap.TestMotors.kI_pos, RobotMap.TIMEOUT);
+    masterTalon.config_kD(_position_slot, RobotMap.TestMotors.kD_pos, RobotMap.TIMEOUT);
+    masterTalon.config_IntegralZone(_position_slot, RobotMap.TestMotors.integral_zone, RobotMap.TIMEOUT);
+    masterTalon.configClosedloopRamp(RobotMap.TestMotors.closed_loop_ramp, RobotMap.TIMEOUT);
+
   }
 
   public void drive(double master, double slave) {
     masterTalon.set(ControlMode.PercentOutput, master);
+    slaveVictor.set(ControlMode.PercentOutput, slave);
   }
 
+  public void setPosition(int target) {
+    masterTalon.set(ControlMode.Position, target);
+  }
+
+  public void zeroEncoder(int pos)
+  {
+    masterTalon.setSelectedSensorPosition(pos, 0, RobotMap.TIMEOUT);
+  }
 
   @Override
   public void initDefaultCommand() { // the command that is run when no other command is running

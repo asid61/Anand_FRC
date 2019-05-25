@@ -39,6 +39,7 @@ public class TestMotors extends Subsystem {
     masterTalon.setNeutralMode(NeutralMode.Brake); // set the behavior when 0 output
     slaveVictor.setNeutralMode(NeutralMode.Brake);
 
+
     masterTalon.setInverted(RobotMap.TestMotors.invertMaster); // set if the output direction is to be inverted
     slaveVictor.follow(masterTalon); // follow the master
     slaveVictor.setInverted(RobotMap.TestMotors.invertSlave); // set if the throttle should be inverted
@@ -51,7 +52,7 @@ public class TestMotors extends Subsystem {
     masterTalon.config_kI(0, RobotMap.TestMotors.kI_pos, RobotMap.TIMEOUT);
     masterTalon.config_kD(0, RobotMap.TestMotors.kD_pos, RobotMap.TIMEOUT);
 
-    masterTalon.config_IntegralZone(0, RobotMap.TestMotors.integral_zone, RobotMap.TIMEOUT);
+    masterTalon.config_IntegralZone(0, RobotMap.TestMotors.integral_zone, RobotMap.TIMEOUT); // clear the integral accumulator when error is larger than the integral zone
 
   }
 
